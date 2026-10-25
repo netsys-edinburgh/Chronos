@@ -1,0 +1,210 @@
+global-sc-network [10.4.1.1] 8000 (?) open
+HOSTNAME        : ue-4010
+UE ID           : 4010
+Computed IMSI   : 208930000004011
+gNB ID          : 4010
+Proxy IP        : 10.3.11.1
+UE IP           : 10.244.12.219
+Actual UE ID:    100
+Actual GNB ID:   100
+Global SC port 8000 is active, enabling logging...
+Calling sched_setscheduler(79)
+[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 3 before DLSCH decoding completed for now marking as compelete 
+[0mCMDLINE: "./nr-uesoftmodem" "-O" "/ue.conf" "--nfapi" "STANDALONE_PNF" "--node-number" "2" "--emulate-l1" "--sa" "1" 
+[CONFIG] get parameters from libconfig /ue.conf [LIBCONFIG] Path for include directive set to: /
+[CONFIG] function config_libconfig_init returned 0
+[CONFIG] config module libconfig loaded
+[LIBCONFIG] config: 2/2 parameters successfully set, (2 to default value)
+[CONFIG] debug flags: 0x00000000
+[LIBCONFIG] log_config: 3/3 parameters successfully set, (1 to default value)
+[LIBCONFIG] log_config: 53/53 parameters successfully set, (45 to default value)
+[LIBCONFIG] log_config: 53/53 parameters successfully set, (53 to default value)
+[LIBCONFIG] log_config: 16/16 parameters successfully set, (16 to default value)
+[LIBCONFIG] log_config: 16/16 parameters successfully set, (16 to default value)
+log init done
+[LIBCONFIG] (root): 33/33 parameters successfully set, (30 to default value)
+[LIBCONFIG] (root): 41/41 parameters successfully set, (38 to default value)
+[LIBCONFIG] (root): 6/6 parameters successfully set, (5 to default value)
+[LIBCONFIG] TTracer: 3/3 parameters successfully set, (3 to default value)
+create a thread for core -1
+create a thread for core -1
+create a thread for core -1
+create a thread for core -1
+create a thread for core -1
+create a thread for core -1
+create a thread for core -1
+create a thread for core -1
+[LIBCONFIG] opt: 3/3 parameters successfully set, (3 to default value)
+[LIBCONFIG] loader: 2/2 parameters successfully set, (2 to default value)
+[LIBCONFIG] loader.ldpc: 2/2 parameters successfully set, (1 to default value)
+shlib_path libldpc.so
+[LOADER] library libldpc.so successfully loaded
+[LIBCONFIG] nas.noS1: 3/3 parameters successfully set, (3 to default value)
+[LIBCONFIG] MACRLCs.[0]: 34/34 parameters successfully set, (25 to default value)
+[LIBCONFIG] (root): 30/30 parameters successfully set, (28 to default value)
+Ujjwal: start -> 100
+TYPE <CTRL-C> TO TERMINATE
+[LIBCONFIG] uicc0: 10/10 parameters successfully set, (5 to default value)
+Entering ITTI signals handler
+TYPE <CTRL-C> TO TERMINATE
+kgnb : 09 d5 51 b2 bc 23 2d fb f9 8a d5 e6 95 ed 75 8e 49 7e 60 dc b2 1d 57 b2 8b 9b a2 0c 95 6f ec ef 
+kausf:b9 1f 50 f2 f5 f4 b3 bb 69 22 db 34 a0 42 5 c8 7e b2 42 c0 c b2 d6 e3 7d 1e 1b e0 62 b1 d3 68 
+kseaf:45 1d b2 39 74 55 1e a6 5e c9 b 3c 72 7c fd 75 6 41 0 97 b7 7e b4 d7 47 55 62 b2 a6 fc 27 bd 
+kamf:bd ca b8 f5 8 14 e2 93 17 3b 93 e4 a4 3f d2 30 50 d1 1e 1 6d 5 b4 1 f f d3 ab 6 bb d1 9b 
+knas_int:
+a3 58 ce 11 8e b2 3e b8 9c 78 63 d4 80 b2 b0 b1 
+mac ba d6 8d bd 
+[NR_RRC]   driving kRRCenc, kRRCint and kUPenc from KgNB=09 d5 51 b2 bc 23 2d fb f9 8a d5 e6 95 ed 75 8e 49 7e 60 dc b2 1d 57 b2 8b 9b a2 0c 95 6f ec ef [0m
+[NR_RRC]   securityModeComplete payload: 2e 00 00 00 00 00 00 00 08 00 00 00 00 00 00 00 [0m
+<UE-NR-Capability>
+    <accessStratumRelease><rel15/></accessStratumRelease>
+    <pdcp-Parameters>
+        <supportedROHC-Profiles>
+            <profile0x0000><false/></profile0x0000>
+            <profile0x0001><false/></profile0x0001>
+            <profile0x0002><false/></profile0x0002>
+            <profile0x0003><false/></profile0x0003>
+            <profile0x0004><false/></profile0x0004>
+            <profile0x0006><false/></profile0x0006>
+            <profile0x0101><false/></profile0x0101>
+            <profile0x0102><false/></profile0x0102>
+            <profile0x0103><false/></profile0x0103>
+            <profile0x0104><false/></profile0x0104>
+        </supportedROHC-Profiles>
+        <maxNumberROHC-ContextSessions><cs2/></maxNumberROHC-ContextSessions>
+    </pdcp-Parameters>
+    <phy-Parameters>
+    </phy-Parameters>
+    <rf-Parameters>
+        <supportedBandListNR>
+            <BandNR>
+                <bandNR>1</bandNR>
+            </BandNR>
+        </supportedBandListNR>
+    </rf-Parameters>
+</UE-NR-Capability>
+[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 7 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 8 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 2 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 4 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 7 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 8 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 11 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 12 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 14 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 15 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 2 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 4 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 3 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 1 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 6 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 0 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 9 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 8 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 10 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 11 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 13 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 15 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 2 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 4 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 3 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 5 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 6 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 7 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 9 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 8 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 10 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 11 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 12 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 14 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 15 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 4 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 3 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 5 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 6 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 7 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 0 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 9 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 8 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 10 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 11 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 12 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 14 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 15 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 2 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 4 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 3 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 5 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 1 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 6 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 0 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 9 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 8 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 10 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 11 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 12 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 14 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 15 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 2 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 4 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 3 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 5 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 1 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 6 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 7 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 9 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 8 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 10 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 11 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 12 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 14 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 2 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 4 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 3 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 5 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 1 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 7 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 0 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 9 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 8 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 10 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 11 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 12 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 13 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 15 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 2 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 4 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 3 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 5 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 6 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 0 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 9 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 8 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 10 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 11 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 13 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 14 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 2 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 4 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 3 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 5 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 1 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 7 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 0 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 9 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 8 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 10 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 12 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 14 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 15 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 2 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 4 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 3 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 1 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 6 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 7 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 0 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 9 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 8 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 10 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 11 before DLSCH decoding completed for now marking as compelete 

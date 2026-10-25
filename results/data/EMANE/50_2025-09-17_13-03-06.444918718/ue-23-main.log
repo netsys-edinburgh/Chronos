@@ -1,0 +1,90 @@
+HOSTNAME        : ue-23
+UE ID           : 23
+Computed IMSI   : 208930000000024
+gNB ID          : 23
+Proxy IP        : 10.3.1.1
+UE IP           : 10.244.1.10
+Actual UE ID:    23
+Actual GNB ID:   23
+global-sc-network [10.4.1.1] 8000 (?) : Connection refused
+Waiting for start message
+Start message received!
+Starting the UE 1758113089.764849
+Calling sched_setscheduler(79)
+CMDLINE: "./nr-uesoftmodem" "-O" "/ue.conf" "--nfapi" "STANDALONE_PNF" "--node-number" "2" "--emulate-l1" "--sa" "1" 
+[CONFIG] get parameters from libconfig /ue.conf [LIBCONFIG] Path for include directive set to: /
+[CONFIG] function config_libconfig_init returned 0
+[CONFIG] config module libconfig loaded
+[LIBCONFIG] config: 2/2 parameters successfully set, (2 to default value)
+[CONFIG] debug flags: 0x00000000
+[LIBCONFIG] log_config: 3/3 parameters successfully set, (1 to default value)
+[LIBCONFIG] log_config: 53/53 parameters successfully set, (45 to default value)
+[LIBCONFIG] log_config: 53/53 parameters successfully set, (53 to default value)
+[LIBCONFIG] log_config: 16/16 parameters successfully set, (16 to default value)
+[LIBCONFIG] log_config: 16/16 parameters successfully set, (16 to default value)
+log init done
+[LIBCONFIG] (root): 33/33 parameters successfully set, (30 to default value)
+[LIBCONFIG] (root): 41/41 parameters successfully set, (38 to default value)
+[LIBCONFIG] (root): 6/6 parameters successfully set, (5 to default value)
+[LIBCONFIG] TTracer: 3/3 parameters successfully set, (3 to default value)
+create a thread for core -1
+create a thread for core -1
+create a thread for core -1
+create a thread for core -1
+create a thread for core -1
+create a thread for core -1
+create a thread for core -1
+create a thread for core -1
+[LIBCONFIG] opt: 3/3 parameters successfully set, (3 to default value)
+[LIBCONFIG] loader: 2/2 parameters successfully set, (2 to default value)
+[LIBCONFIG] loader.ldpc: 2/2 parameters successfully set, (1 to default value)
+shlib_path libldpc.so
+[LOADER] library libldpc.so successfully loaded
+[LIBCONFIG] nas.noS1: 3/3 parameters successfully set, (3 to default value)
+[LIBCONFIG] MACRLCs.[0]: 34/34 parameters successfully set, (25 to default value)
+[LIBCONFIG] (root): 30/30 parameters successfully set, (28 to default value)
+Ujjwal: start -> 23
+TYPE <CTRL-C> TO TERMINATE
+[LIBCONFIG] uicc0: 10/10 parameters successfully set, (5 to default value)
+Entering ITTI signals handler
+TYPE <CTRL-C> TO TERMINATE
+kgnb : 38 87 a2 9d 2c cd d1 b2 9f 14 03 7f 91 4a 01 6b ac 17 3d b1 45 9c f7 82 4e bb 05 ea ae 55 ea 7d 
+kausf:28 be d b0 a 8c 1a b7 3b 58 46 61 9a 87 9c fc 89 44 97 60 76 8a dc cc e8 b1 ff 4d da 3f 78 65 
+kseaf:96 46 b0 ab 7c 92 be 8d 15 86 37 39 61 4a 8c 68 af f4 51 2d b0 8d 39 e9 55 b6 ab 64 a6 12 c4 94 
+kamf:26 57 dc 69 e4 96 9b 86 ca d4 8a 36 b7 57 11 dd f5 95 63 62 56 64 7c d5 5d ee 80 ba 74 a7 b3 2e 
+knas_int:
+cc cc cc 75 96 4e b4 0 19 1c c d5 c4 eb 4f c3 
+mac 32 d7 18 3c 
+[NR_RRC]   driving kRRCenc, kRRCint and kUPenc from KgNB=38 87 a2 9d 2c cd d1 b2 9f 14 03 7f 91 4a 01 6b ac 17 3d b1 45 9c f7 82 4e bb 05 ea ae 55 ea 7d [0m
+[NR_RRC]   securityModeComplete payload: 28 00 00 00 00 00 00 00 08 00 00 00 00 00 00 00 [0m
+<UE-NR-Capability>
+    <accessStratumRelease><rel15/></accessStratumRelease>
+    <pdcp-Parameters>
+        <supportedROHC-Profiles>
+            <profile0x0000><false/></profile0x0000>
+            <profile0x0001><false/></profile0x0001>
+            <profile0x0002><false/></profile0x0002>
+            <profile0x0003><false/></profile0x0003>
+            <profile0x0004><false/></profile0x0004>
+            <profile0x0006><false/></profile0x0006>
+            <profile0x0101><false/></profile0x0101>
+            <profile0x0102><false/></profile0x0102>
+            <profile0x0103><false/></profile0x0103>
+            <profile0x0104><false/></profile0x0104>
+        </supportedROHC-Profiles>
+        <maxNumberROHC-ContextSessions><cs2/></maxNumberROHC-ContextSessions>
+    </pdcp-Parameters>
+    <phy-Parameters>
+    </phy-Parameters>
+    <rf-Parameters>
+        <supportedBandListNR>
+            <BandNR>
+                <bandNR>1</bandNR>
+            </BandNR>
+        </supportedBandListNR>
+    </rf-Parameters>
+</UE-NR-Capability>
+[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 8 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 14 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 11 before DLSCH decoding completed for now marking as compelete 
+[0m[1;31m[NR_MAC]   DLSCH ACK/NACK reporting initiated for harq pid 7 before DLSCH decoding completed for now marking as compelete 

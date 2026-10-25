@@ -1,0 +1,12 @@
+HOSTNAME        : ue-6674
+UE ID           : 6674
+Computed IMSI   : 208930000006675
+gNB ID          : 6674
+Proxy IP        : 10.3.35.1
+UE IP           : 10.244.36.2
+Actual UE ID:    166
+Actual GNB ID:   166
+global-sc-network [10.4.1.1] 8000 (?) open
+Global SC port 8000 is active, enabling logging...
+Calling sched_setscheduler(79)
+/config/ue-deploy.sh: line 44:    14 Killed                  taskset -c 2-50 chrt -f 99 ./nr-uesoftmodem -O /ue.conf --nfapi STANDALONE_PNF --node-number 2 --emulate-l1 --sa 1 $UE_ID $GNB_ID

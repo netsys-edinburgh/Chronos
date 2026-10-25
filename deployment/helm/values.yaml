@@ -1,0 +1,35 @@
+# Docker images
+coreImage: docker.io/andrewferguson/chronos-core:stable
+globalSCImage: docker.io/andrewferguson/chronos-proxy:87c87496
+gNBImage: docker.io/andrewferguson/chronos-gnb:69d7fccc
+proxyImage: docker.io/andrewferguson/chronos-proxy:87c87496
+#proxyImage: docker.io/andrewferguson/chronos-proxy:e8343f94 # experimental/testing
+ueImage: docker.io/andrewferguson/chronos-ue:195598ad
+ueDataPlaneImage: docker.io/andrewferguson/phobos-dataplane:v1
+mongoImage: docker.io/andrewferguson/mongo-open5gs:11k-ue
+persistueImage: docker.io/library/python:trixie
+
+# Number of nodes
+numberGNBNodes: 90
+numberProxyNodes: 40
+
+# IPs
+globalSCIP: 10.4.1.1
+
+# Number of UE and gNB
+numberGNB: 10000
+numberUE: 10000
+
+# Data plane for UEs
+ueDataPlane: irtt
+ueDataPlaneWaitTime: 0.5
+ueDataPlanePingSleepTime: 0.5
+ueDataPlaneIrttSleepTime: 0.5
+
+# Enables large scale features
+gnbRandomStartupDelay: True
+ueStartSignalWait: True
+ueStartSignalPort: 8000
+ueNineLogging: True
+imagePullPolicy: IfNotPresent
+dilateFirstNode: False

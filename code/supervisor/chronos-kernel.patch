@@ -1,0 +1,164 @@
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index af33aafcb4..67bc193380 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -197,6 +197,10 @@ module_param(avic, bool, 0444);
+ bool __read_mostly dump_invalid_vmcb;
+ module_param(dump_invalid_vmcb, bool, 0644);
+ 
++/* Fake TSC exported by the out-of-tree custom_tsc module (see vmx.c). */
++extern atomic64_t global_tsc;
++static atomic64_t *global_tsc_ptr = NULL;
++
+ 
+ bool intercept_smi = true;
+ module_param(intercept_smi, bool, 0444);
+@@ -1210,6 +1214,7 @@ static void init_vmcb(struct kvm_vcpu *vcpu)
+ 
+ 	svm_set_intercept(svm, INTERCEPT_SELECTIVE_CR0);
+ 	svm_set_intercept(svm, INTERCEPT_RDPMC);
++	svm_set_intercept(svm, INTERCEPT_RDTSC);
+ 	svm_set_intercept(svm, INTERCEPT_CPUID);
+ 	svm_set_intercept(svm, INTERCEPT_INVD);
+ 	svm_set_intercept(svm, INTERCEPT_INVLPG);
+@@ -2471,6 +2476,21 @@ static int emulate_on_interception(struct kvm_vcpu *vcpu)
+ 	return kvm_emulate_instruction(vcpu, 0);
+ }
+ 
++static int rdtsc_interception(struct kvm_vcpu *vcpu)
++{
++	u64 rdtsc_real;
++
++	if (global_tsc_ptr)
++		rdtsc_real = atomic64_read(global_tsc_ptr);
++	else
++		rdtsc_real = rdtsc();
++
++	kvm_rax_write(vcpu, rdtsc_real & -1u);
++	kvm_rdx_write(vcpu, (rdtsc_real >> 32) & -1u);
++
++	return kvm_skip_emulated_instruction(vcpu);
++}
++
+ static int rsm_interception(struct kvm_vcpu *vcpu)
+ {
+ 	return kvm_emulate_instruction_from_buffer(vcpu, rsm_ins_bytes, 2);
+@@ -3125,6 +3145,7 @@ static int (*const svm_exit_handlers[])(struct kvm_vcpu *vcpu) = {
+ 	[SVM_EXIT_SMI]				= smi_interception,
+ 	[SVM_EXIT_VINTR]			= interrupt_window_interception,
+ 	[SVM_EXIT_RDPMC]			= kvm_emulate_rdpmc,
++	[SVM_EXIT_RDTSC]			= rdtsc_interception,
+ 	[SVM_EXIT_CPUID]			= kvm_emulate_cpuid,
+ 	[SVM_EXIT_IRET]                         = iret_interception,
+ 	[SVM_EXIT_INVD]                         = kvm_emulate_invd,
+@@ -4720,15 +4741,28 @@ static struct kvm_x86_init_ops svm_init_ops __initdata = {
+ 
+ static int __init svm_init(void)
+ {
++	int r;
++
+ 	__unused_size_checks();
+ 
+-	return kvm_init(&svm_init_ops, sizeof(struct vcpu_svm),
+-			__alignof__(struct vcpu_svm), THIS_MODULE);
++	global_tsc_ptr = symbol_get(global_tsc);
++	if (!global_tsc_ptr)
++		pr_info("global_tsc symbol not found, guest RDTSC uses real TSC\n");
++
++	r = kvm_init(&svm_init_ops, sizeof(struct vcpu_svm),
++		     __alignof__(struct vcpu_svm), THIS_MODULE);
++	if (r && global_tsc_ptr) {
++		symbol_put(global_tsc);
++		global_tsc_ptr = NULL;
++	}
++	return r;
+ }
+ 
+ static void __exit svm_exit(void)
+ {
+ 	kvm_exit();
++	if (global_tsc_ptr)
++		symbol_put(global_tsc);
+ }
+ 
+ module_init(svm_init)
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index ab7141c1de..e4208d3869 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -47,7 +47,7 @@
+ #include <asm/spec-ctrl.h>
+ #include <asm/virtext.h>
+ #include <asm/vmx.h>
+-
++#include <linux/kallsyms.h>
+ #include "capabilities.h"
+ #include "cpuid.h"
+ #include "evmcs.h"
+@@ -76,6 +76,8 @@ static const struct x86_cpu_id vmx_cpu_id[] = {
+ };
+ MODULE_DEVICE_TABLE(x86cpu, vmx_cpu_id);
+ #endif
++extern atomic64_t global_tsc;
++static atomic64_t *global_tsc_ptr = NULL;
+ 
+ bool __read_mostly enable_vpid = 1;
+ module_param_named(vpid, enable_vpid, bool, 0444);
+@@ -2507,7 +2509,8 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
+ 	      CPU_BASED_MWAIT_EXITING |
+ 	      CPU_BASED_MONITOR_EXITING |
+ 	      CPU_BASED_INVLPG_EXITING |
+-	      CPU_BASED_RDPMC_EXITING;
++	      CPU_BASED_RDPMC_EXITING |
++		  CPU_BASED_RDTSC_EXITING;
+ 
+ 	opt = CPU_BASED_TPR_SHADOW |
+ 	      CPU_BASED_USE_MSR_BITMAPS |
+@@ -5672,6 +5675,22 @@ static int handle_bus_lock_vmexit(struct kvm_vcpu *vcpu)
+ 	return 1;
+ }
+ 
++static int handle_rdtsc(struct kvm_vcpu *vcpu) 
++{   static u64 rdtsc_real;
++    if (!global_tsc_ptr) {
++        rdtsc_real = rdtsc();
++    }
++	else{
++		rdtsc_real = atomic64_read(global_tsc_ptr);
++	}
++	
++    vcpu->arch.regs[VCPU_REGS_RAX] = rdtsc_real & -1u;
++    vcpu->arch.regs[VCPU_REGS_RDX] = (rdtsc_real >> 32) & -1u;
++    
++    return skip_emulated_instruction(vcpu);
++}
++
++
+ /*
+  * The exit handlers return 1 if the exit was handled fully and guest execution
+  * may resume.  Otherwise they set the kvm_run parameter to indicate what needs
+@@ -5729,6 +5748,7 @@ static int (*kvm_vmx_exit_handlers[])(struct kvm_vcpu *vcpu) = {
+ 	[EXIT_REASON_PREEMPTION_TIMER]	      = handle_preemption_timer,
+ 	[EXIT_REASON_ENCLS]		      = handle_encls,
+ 	[EXIT_REASON_BUS_LOCK]                = handle_bus_lock_vmexit,
++	[EXIT_REASON_RDTSC]                   = handle_rdtsc,
+ };
+ 
+ static const int kvm_vmx_max_exit_handlers =
+@@ -8130,12 +8150,16 @@ static void vmx_exit(void)
+ 	vmx_cleanup_l1d_flush();
+ 
+ 	allow_smaller_maxphyaddr = false;
++	if (global_tsc_ptr) {
++    symbol_put(global_tsc);
++    }
+ }
+ module_exit(vmx_exit);
+ 
+ static int __init vmx_init(void)
+ {
+ 	int r, cpu;
++    global_tsc_ptr = symbol_get(global_tsc);
+ 
+ #if IS_ENABLED(CONFIG_HYPERV)
+ 	/*

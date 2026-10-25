@@ -1,0 +1,36 @@
+{{- $uePerProxy := ceil (divf $.Values.numberUE $.Values.numberProxyNodes) | int }}
+{{- range $i, $replica := until ( .Values.numberProxyNodes | int )}}
+{{- $proxyIP := printf "10.3.%d.1" ( add $i 1 ) -}}
+{{- $proxyNode := printf "proxy-%d" $i -}}
+{{- $proxyConfig := printf "proxy-%d-config" $i }}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ printf "proxy-%d" $i }}
+spec:
+  hostNetwork: true
+  terminationGracePeriodSeconds: 5
+  containers:
+  - name: proxy
+    image: {{ $.Values.proxyImage | quote }}
+    imagePullPolicy: {{ $.Values.imagePullPolicy | quote }}
+    command: ["taskset", "-c", "3-31", "/phobos-5g/build/proxy", {{ $uePerProxy | quote }}, "--chronos5g", "/config/gnb-ips", "/config/gnb-ids", {{ $i | quote }}, {{ $proxyIP | quote }}, {{ $.Values.globalSCIP | quote }}]
+    stdin: true
+    tty: true
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - mountPath: /config
+      name: {{ $proxyConfig }}
+    lifecycle:
+      preStop:
+        exec:
+          command: ["pkill", "-SIGINT", "proxy"]
+  nodeSelector:
+    kubernetes.io/hostname: {{ $proxyNode | quote }}
+  volumes:
+  - name: {{ $proxyConfig }}
+    configMap:
+      name: {{ $proxyConfig }}
+---
+{{- end }}

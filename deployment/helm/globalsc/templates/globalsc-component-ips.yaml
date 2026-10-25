@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: globalsc-component-ips
+data:
+  globalsc-component-ips: |
+    {{- if $.Values.dilateFirstNode }}
+    10.1.1.1
+    {{- end }}
+    {{- range $i, $replica := until ( .Values.numberGNBNodes | int )}}
+    10.1.{{ add $i 2 }}.1
+    {{- end }}

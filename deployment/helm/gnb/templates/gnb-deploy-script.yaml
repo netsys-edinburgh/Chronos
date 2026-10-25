@@ -1,0 +1,61 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gnb-deploy
+data:
+  gnb-deploy.sh: |
+    #!/bin/bash
+    if [ "$#" -ne 4 ]; then
+        echo "USE: ./setup_gnb.sh <ID> <gNB IP> <Proxy IP> <Core IP>"
+        exit 1
+    fi
+
+    GNB_ID=$1
+    GNB_IP=$2
+    PROXY_IP=$3
+    CORE_IP=$4
+    SLEEP=$(bc <<< "scale=4; $(($RANDOM % 1000))/10")
+
+    # Check we can reach all the IPs
+    ping -c 1 $PROXY_IP || { echo "Proxy IP $PROXY_IP not reachable"; exit 1; }
+    ping -c 1 $CORE_IP || { echo "Core IP $CORE_IP not reachable"; exit 1; }
+
+    # Check we can bind to the gNB IP
+    ip a | grep "$GNB_IP/16" || { echo "gNB IP $GNB_IP not available"; exit 1; }
+
+    # Save the gNB IP address so it can be used by the gNB for binding
+    # (we write to a file rather than passing a cli arg to nr-softmodem because this is a bodge)
+    echo "$GNB_IP" > /gnb_ip_addr
+
+    cd /openairinterface-nfapi-netsys/cmake_targets/ran_build/build
+
+    cp template_gnb.conf gnb.conf
+
+    sed -i "s/core_ip/$CORE_IP/g" gnb.conf
+    sed -i "s/proxy_ip/$PROXY_IP/g" gnb.conf
+    sed -i "s/enb_ip/$GNB_IP/g" gnb.conf
+    sed -i "s/gnb_id/$GNB_ID/g" gnb.conf
+
+    LCP="$((50601+8*$GNB_ID))"
+    RCP="$((50600+8*$GNB_ID))"
+    LDP="$((50611+8*$GNB_ID))"
+    RDP="$((50610+8*$GNB_ID))"
+
+    sed -i "s/phy_id_cell/$GNB_ID/g" gnb.conf
+
+    sed -i "s/LOCAL_C_PORT/$LCP/g" gnb.conf
+    sed -i "s/REMOTE_C_PORT/$RCP/g" gnb.conf
+    sed -i "s/LOCAL_D_PORT/$LDP/g" gnb.conf
+    sed -i "s/REMOTE_D_PORT/$RDP/g" gnb.conf
+
+    {{ if .Values.ueStartSignalWait -}}
+    echo "Sleeping for $SLEEP seconds"
+    sleep $SLEEP
+    {{- end }}
+
+    echo "Executing the gNBs"
+    cd ../../../
+    source oaienv
+    cd cmake_targets/ran_build/build
+
+    ./nr-softmodem -O ./gnb.conf --nfapi VNF --emulate-l1 --sa --MACRLCs.[0].ulsch_max_frame_inactivity 0

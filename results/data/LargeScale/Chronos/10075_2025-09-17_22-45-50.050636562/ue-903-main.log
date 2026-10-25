@@ -1,0 +1,84 @@
+HOSTNAME        : ue-903
+UE ID           : 903
+Computed IMSI   : 208930000000904
+gNB ID          : 903
+Proxy IP        : 10.3.24.1
+UE IP           : 10.244.59.189
+global-sc-network [10.4.1.1] 8000 (?) open
+Calling sched_setscheduler(79)
+Actual UE ID:    22
+Actual GNB ID:   22
+Global SC port 8000 is active, enabling logging...
+CMDLINE: "./nr-uesoftmodem" "-O" "/ue.conf" "--nfapi" "STANDALONE_PNF" "--node-number" "2" "--emulate-l1" "--sa" "1" 
+[CONFIG] get parameters from libconfig /ue.conf [LIBCONFIG] Path for include directive set to: /
+[CONFIG] function config_libconfig_init returned 0
+[CONFIG] config module libconfig loaded
+[LIBCONFIG] config: 2/2 parameters successfully set, (2 to default value)
+[CONFIG] debug flags: 0x00000000
+[LIBCONFIG] log_config: 3/3 parameters successfully set, (1 to default value)
+[LIBCONFIG] log_config: 53/53 parameters successfully set, (45 to default value)
+[LIBCONFIG] log_config: 53/53 parameters successfully set, (53 to default value)
+[LIBCONFIG] log_config: 16/16 parameters successfully set, (16 to default value)
+[LIBCONFIG] log_config: 16/16 parameters successfully set, (16 to default value)
+log init done
+[LIBCONFIG] (root): 33/33 parameters successfully set, (30 to default value)
+[LIBCONFIG] (root): 41/41 parameters successfully set, (38 to default value)
+[LIBCONFIG] (root): 6/6 parameters successfully set, (5 to default value)
+[LIBCONFIG] TTracer: 3/3 parameters successfully set, (3 to default value)
+create a thread for core -1
+create a thread for core -1
+create a thread for core -1
+create a thread for core -1
+create a thread for core -1
+create a thread for core -1
+create a thread for core -1
+create a thread for core -1
+[LIBCONFIG] opt: 3/3 parameters successfully set, (3 to default value)
+[LIBCONFIG] loader: 2/2 parameters successfully set, (2 to default value)
+[LIBCONFIG] loader.ldpc: 2/2 parameters successfully set, (1 to default value)
+shlib_path libldpc.so
+[LOADER] library libldpc.so successfully loaded
+[LIBCONFIG] nas.noS1: 3/3 parameters successfully set, (3 to default value)
+[LIBCONFIG] MACRLCs.[0]: 34/34 parameters successfully set, (25 to default value)
+[LIBCONFIG] (root): 30/30 parameters successfully set, (28 to default value)
+Ujjwal: start -> 22
+TYPE <CTRL-C> TO TERMINATE
+[LIBCONFIG] uicc0: 10/10 parameters successfully set, (5 to default value)
+Entering ITTI signals handler
+TYPE <CTRL-C> TO TERMINATE
+kgnb : fc c8 58 2a 51 27 1e 65 a0 8f 57 c2 ab f6 99 04 9d c9 68 3d ee 98 76 3c e5 b6 6a ab 25 5e 42 a1 
+kausf:b1 e3 ae 7c 7f 41 ad b9 f4 c5 35 89 19 8b b4 ad ec 98 61 2c e7 64 c0 6a 67 bc 16 2 40 8f 3a da 
+kseaf:b2 bc 9f 65 b3 a0 4d c9 a4 4c 15 8f 27 cd 31 7d 47 51 df 57 bd 0 a2 c7 ea 40 0 37 c4 97 4f 86 
+kamf:5d dd b3 fc 69 a8 45 53 95 80 24 ca 8a 9 3 3d f4 f7 79 b7 bc 2e d8 a ad 6d c0 20 d4 80 2 4d 
+knas_int:
+ce 4a c7 1f b 93 a0 26 c9 54 fc b7 35 4e fa c1 
+mac 1c 97 2b a6 
+[NR_RRC]   driving kRRCenc, kRRCint and kUPenc from KgNB=fc c8 58 2a 51 27 1e 65 a0 8f 57 c2 ab f6 99 04 9d c9 68 3d ee 98 76 3c e5 b6 6a ab 25 5e 42 a1 [0m
+[NR_RRC]   securityModeComplete payload: 2e 00 00 00 00 00 00 00 08 00 00 00 00 00 00 00 [0m
+<UE-NR-Capability>
+    <accessStratumRelease><rel15/></accessStratumRelease>
+    <pdcp-Parameters>
+        <supportedROHC-Profiles>
+            <profile0x0000><false/></profile0x0000>
+            <profile0x0001><false/></profile0x0001>
+            <profile0x0002><false/></profile0x0002>
+            <profile0x0003><false/></profile0x0003>
+            <profile0x0004><false/></profile0x0004>
+            <profile0x0006><false/></profile0x0006>
+            <profile0x0101><false/></profile0x0101>
+            <profile0x0102><false/></profile0x0102>
+            <profile0x0103><false/></profile0x0103>
+            <profile0x0104><false/></profile0x0104>
+        </supportedROHC-Profiles>
+        <maxNumberROHC-ContextSessions><cs2/></maxNumberROHC-ContextSessions>
+    </pdcp-Parameters>
+    <phy-Parameters>
+    </phy-Parameters>
+    <rf-Parameters>
+        <supportedBandListNR>
+            <BandNR>
+                <bandNR>1</bandNR>
+            </BandNR>
+        </supportedBandListNR>
+    </rf-Parameters>
+</UE-NR-Capability>

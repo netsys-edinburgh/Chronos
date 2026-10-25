@@ -1,0 +1,21 @@
+{{- range $i, $replica := until ( .Values.numberProxyNodes | int )}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ printf "proxy-%d-config" $i }}
+data:
+  gnb-ids: |
+  {{- range $j, $replica := until ( $.Values.numberGNB | int )}}
+  {{- if eq $i (mod $j ( $.Values.numberProxyNodes | int ) ) }}
+    {{ div $j ( $.Values.numberProxyNodes | int ) }}
+  {{- end }}
+  {{- end }}  
+  gnb-ips: |
+  {{- range $j, $replica := until ( $.Values.numberGNB | int )}}
+  {{- if eq $i (mod $j ( $.Values.numberProxyNodes | int ) ) }}
+  {{- $gnbIP := printf "10.2.%d.%d" (add (mod $j $.Values.numberGNBNodes) 2) (add (div $j $.Values.numberGNBNodes) 2) }}
+    {{ $gnbIP }}
+  {{- end }}
+  {{- end }}  
+---
+{{- end }}

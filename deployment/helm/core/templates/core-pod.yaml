@@ -1,0 +1,52 @@
+{{- range $i, $replica := until ( .Values.numberProxyNodes | int )}}
+{{- $coreNode := printf "proxy-%d" $i -}}
+{{- $coreIP := printf "10.3.%d.2" ( add $i 1 ) -}}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ printf "core-%d" $i }}
+spec:
+  hostNetwork: true
+  nodeName: {{ $coreNode }}
+  terminationGracePeriodSeconds: 5
+  containers:
+  - name: core
+    image: {{ $.Values.coreImage | quote }}
+    imagePullPolicy: {{ $.Values.imagePullPolicy | quote }}
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - name: dev-tun
+      mountPath: /dev/net/tun
+    - mountPath: /config
+      name: core-config
+    ports:
+    - containerPort: 38412
+    - containerPort: 2152
+    command: ["bash", "/config/init.sh", {{ $coreIP | quote }}]
+    resources:
+      requests:
+        cpu: 20
+        memory: "100Gi"
+      limits:
+        cpu: 20
+        memory: "100Gi"
+  - name: mongodb
+    image: {{ $.Values.mongoImage | quote }}
+    imagePullPolicy: {{ $.Values.imagePullPolicy | quote }}
+    command:
+      - bash
+      - -c
+      - "mongod & mkdir open5gs && mv *son /open5gs && mongorestore -d open5gs open5gs && sleep inf"
+    ports:
+    - containerPort: 27017
+  volumes:
+  - name: dev-tun
+    hostPath:
+      path: /dev/net/tun
+      type: CharDevice
+  - name: core-config
+    configMap:
+      name: core-config
+---
+{{- end }}

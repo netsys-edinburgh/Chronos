@@ -1,0 +1,36 @@
+{{- range $i, $replica := until ( .Values.numberGNB | int )}}
+{{- $gnbIP := printf "10.2.%d.%d" (add (mod $i $.Values.numberGNBNodes) 2) (add (div $i $.Values.numberGNBNodes) 2) -}}
+{{- $proxyIP := printf "10.3.%d.1" (add (mod $i $.Values.numberProxyNodes) 1) -}}
+{{- $gnbID := div $i $.Values.numberProxyNodes -}}
+{{- $coreIP := printf "10.3.%d.2" (add (mod $i $.Values.numberProxyNodes) 1) -}}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ (printf "gnb-%d" $i) }}
+spec:
+  hostNetwork: true
+  restartPolicy: Never
+  terminationGracePeriodSeconds: 5
+  containers:
+  - name: gnb
+    image: {{ $.Values.gNBImage | quote }}
+    imagePullPolicy: {{ $.Values.imagePullPolicy | quote }}
+    command: ["bash", "/config/gnb-deploy.sh", {{ $gnbID | quote }}, {{ $gnbIP | quote}}, {{ $proxyIP | quote }}, {{ $coreIP | quote }}]
+    stdin: true
+    tty: true
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - mountPath: /config
+      name: gnb-deploy
+  nodeSelector:
+    kubernetes.io/hostname: {{ printf "ins%dvm" ( add ( mod $i $.Values.numberGNBNodes ) 1 ) }}
+  volumes:
+  - name: gnb-deploy
+    configMap:
+      name: gnb-deploy
+      items:
+      - key: gnb-deploy.sh
+        path: gnb-deploy.sh
+---
+{{- end }}

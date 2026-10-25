@@ -1,0 +1,87 @@
+HOSTNAME        : ue-2965
+UE ID           : 2965
+Computed IMSI   : 208930000002966
+gNB ID          : 2965
+Proxy IP        : 10.3.6.1
+UE IP           : 10.244.103.213
+Actual UE ID:    74
+Actual GNB ID:   74
+global-sc-network [10.4.1.1] 8000 (?) : Connection refused
+Waiting for start message
+Start message received!
+Starting the UE 1758137082.1564393
+Calling sched_setscheduler(79)
+CMDLINE: "./nr-uesoftmodem" "-O" "/ue.conf" "--nfapi" "STANDALONE_PNF" "--node-number" "2" "--emulate-l1" "--sa" "1" 
+[CONFIG] get parameters from libconfig /ue.conf [LIBCONFIG] Path for include directive set to: /
+[CONFIG] function config_libconfig_init returned 0
+[CONFIG] config module libconfig loaded
+[LIBCONFIG] config: 2/2 parameters successfully set, (2 to default value)
+[CONFIG] debug flags: 0x00000000
+[LIBCONFIG] log_config: 3/3 parameters successfully set, (1 to default value)
+[LIBCONFIG] log_config: 53/53 parameters successfully set, (45 to default value)
+[LIBCONFIG] log_config: 53/53 parameters successfully set, (53 to default value)
+[LIBCONFIG] log_config: 16/16 parameters successfully set, (16 to default value)
+[LIBCONFIG] log_config: 16/16 parameters successfully set, (16 to default value)
+log init done
+[LIBCONFIG] (root): 33/33 parameters successfully set, (30 to default value)
+[LIBCONFIG] (root): 41/41 parameters successfully set, (38 to default value)
+[LIBCONFIG] (root): 6/6 parameters successfully set, (5 to default value)
+[LIBCONFIG] TTracer: 3/3 parameters successfully set, (3 to default value)
+create a thread for core -1
+create a thread for core -1
+create a thread for core -1
+create a thread for core -1
+create a thread for core -1
+create a thread for core -1
+create a thread for core -1
+create a thread for core -1
+[LIBCONFIG] opt: 3/3 parameters successfully set, (3 to default value)
+[LIBCONFIG] loader: 2/2 parameters successfully set, (2 to default value)
+[LIBCONFIG] loader.ldpc: 2/2 parameters successfully set, (1 to default value)
+shlib_path libldpc.so
+[LOADER] library libldpc.so successfully loaded
+[LIBCONFIG] nas.noS1: 3/3 parameters successfully set, (3 to default value)
+[LIBCONFIG] MACRLCs.[0]: 34/34 parameters successfully set, (25 to default value)
+[LIBCONFIG] (root): 30/30 parameters successfully set, (28 to default value)
+Ujjwal: start -> 74
+TYPE <CTRL-C> TO TERMINATE
+[LIBCONFIG] uicc0: 10/10 parameters successfully set, (5 to default value)
+Entering ITTI signals handler
+TYPE <CTRL-C> TO TERMINATE
+kgnb : aa 23 8f a0 f8 f3 fe 2c 24 28 9f 67 e5 5a b9 4d f4 7f a5 9e 6a 06 4e bd 9a 26 26 1c bd 6c f3 64 
+kausf:b0 40 76 15 90 58 60 74 1c 85 94 b 41 1a 26 ef 24 51 cd ba ea 97 63 a3 aa db e0 c3 2e 6 e0 c4 
+kseaf:4e ef 5f 9d b 9f 80 34 ff 21 5d 88 52 a4 3b 23 4f 3d 19 3b b7 f d8 50 a b3 42 60 bd a3 0 79 
+kamf:75 4f 10 5d c7 99 a0 79 7e d0 5 41 5b 6b 75 6d d8 10 42 3b 9e ed b6 4a 17 38 8d 7 96 8d ef 9e 
+knas_int:
+e3 3f 11 fd 49 4 68 5b 41 7b 79 e 40 7c 2b b1 
+mac e 81 42 af 
+[NR_RRC]   driving kRRCenc, kRRCint and kUPenc from KgNB=aa 23 8f a0 f8 f3 fe 2c 24 28 9f 67 e5 5a b9 4d f4 7f a5 9e 6a 06 4e bd 9a 26 26 1c bd 6c f3 64 [0m
+[NR_RRC]   securityModeComplete payload: 28 00 00 00 00 00 00 00 08 00 00 00 00 00 00 00 [0m
+<UE-NR-Capability>
+    <accessStratumRelease><rel15/></accessStratumRelease>
+    <pdcp-Parameters>
+        <supportedROHC-Profiles>
+            <profile0x0000><false/></profile0x0000>
+            <profile0x0001><false/></profile0x0001>
+            <profile0x0002><false/></profile0x0002>
+            <profile0x0003><false/></profile0x0003>
+            <profile0x0004><false/></profile0x0004>
+            <profile0x0006><false/></profile0x0006>
+            <profile0x0101><false/></profile0x0101>
+            <profile0x0102><false/></profile0x0102>
+            <profile0x0103><false/></profile0x0103>
+            <profile0x0104><false/></profile0x0104>
+        </supportedROHC-Profiles>
+        <maxNumberROHC-ContextSessions><cs2/></maxNumberROHC-ContextSessions>
+    </pdcp-Parameters>
+    <phy-Parameters>
+    </phy-Parameters>
+    <rf-Parameters>
+        <supportedBandListNR>
+            <BandNR>
+                <bandNR>1</bandNR>
+            </BandNR>
+        </supportedBandListNR>
+    </rf-Parameters>
+</UE-NR-Capability>
+[1;31m[SDAP]   /openairinterface5g/openair2/SDAP/nr_sdap/nr_sdap.c:45:sdap_data_req: Entity not found with ue: 0xd6de and pdusession id: 0

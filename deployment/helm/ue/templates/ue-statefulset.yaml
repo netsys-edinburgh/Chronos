@@ -1,0 +1,50 @@
+{{- $uePerGNB := ceil (divf .Values.numberUE .Values.numberGNB) | int }}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ue
+spec:
+  serviceName: ue
+  replicas: {{ .Values.numberUE }}
+  podManagementPolicy: Parallel
+  selector:
+    matchLabels:
+      app: ue
+  template:
+    metadata:
+      labels:
+        app: ue
+    spec:
+      terminationGracePeriodSeconds: 5
+      containers:
+      - name: ue
+        image: {{ .Values.ueImage }}
+        imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
+        command: ["/bin/bash", "/config/ue-deploy.sh"]
+        securityContext:
+          privileged: true
+        env:
+        - name: UE_PER_GNB
+          value: {{ $uePerGNB | quote }}
+        - name: NUM_PROXY
+          value: {{ .Values.numberProxyNodes | quote }}
+        - name: UE_IP_ADDR
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        volumeMounts:
+        - mountPath: /config
+          name: ue-config
+      - name: dp
+        image: {{ .Values.ueDataPlaneImage }}
+        imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
+        command: ["bash", "/config/ue-dataplane.sh"]
+        volumeMounts:
+        - mountPath: /config
+          name: ue-config
+      volumes:
+      - name: ue-config
+        configMap:
+          name: ue-config
+      nodeSelector:
+        dilated: "true"

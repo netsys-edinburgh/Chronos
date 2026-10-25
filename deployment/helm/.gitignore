@@ -1,0 +1,9 @@
+# Generated at run time by ue-start.sh, which rewrites it from the live pod
+# IPs; run-experiment.sh regenerates it immediately before running it. A
+# committed copy is just stale addresses from someone else's run.
+start.sh
+
+# Log/pcap bundles written into this directory by save-logs.sh, named
+# <UE count>_<timestamp> (save-logs.sh:116). Committing these is what bloated
+# the previous repo: ~840MB across 39,926 files.
+[0-9]*_[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]_*/

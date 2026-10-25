@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: usrpplugin
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      name: usrpplugin
+  template:
+    metadata:
+      labels:
+        name: usrpplugin
+    spec:
+      hostNetwork: true
+      containers:
+      - name: usrpplugin
+        image: j0lama/usrp_plugin:latest
+        imagePullPolicy: Always
+        securityContext:
+          privileged: true
+        command:
+        - python3
+        - usrpplugin.py
+        volumeMounts:
+          - name: device-plugin
+            mountPath: /var/lib/kubelet/device-plugins
+          - name: dev
+            mountPath: /dev/
+      volumes:
+        - name: device-plugin
+          hostPath:
+            path: /var/lib/kubelet/device-plugins
+        - name: dev
+          hostPath:
+            path: /dev/
+      tolerations:
+      - key: "smallbox"
+        operator: "Equal"
+        value: "true"
+        effect: "NoSchedule"

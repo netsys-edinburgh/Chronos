@@ -1,0 +1,153 @@
+#!/bin/bash
+
+use_strace=false
+use_valgrind=false
+
+while (( $# > 0 )); do
+    case "$1" in
+      (--strace)
+          use_strace=true
+          shift
+          ;;
+      (--valgrind)
+          use_valgrind=true
+          shift
+          ;;
+      (*)
+          break
+          ;;
+    esac
+done
+
+if (( $# == 0 )); then
+    echo >&2 "usage: ${0##*/} enb|ue|gnb|nrue [softmodem-args...]"
+    exit 1
+fi
+node_type=$1; shift
+
+proxy_dir=$(dirname "$0")        # e.g., ~/oai-lte-multi-ue-proxy
+
+cd "$proxy_dir/../openairinterface5g" || exit
+source oaienv
+cd cmake_targets || exit
+
+# Enable extra run-time checking in malloc/free.  See malopt(3)
+export MALLOC_CHECK_=3
+
+case "$node_type" in
+    (enb)
+        echo "Node $NODE_NUMBER: eNB"
+        cmd=(
+            # Keep the eNB on processor 1 (the second processor) by default
+            taskset --cpu-list 1
+            ./ran_build/build/lte-softmodem
+            -O ../ci-scripts/conf_files/untested/episci/proxy_rcc.band7.tm1.nfapi.conf
+            --noS1
+            --emulate-l1
+            --log_config.global_log_options level,nocolor,time,thread_id
+        )
+        ;;
+
+    (gnb)
+        echo "Node $NODE_NUMBER: gNB"
+        sudo ifconfig lo: 127.0.0.2 down >&/dev/null
+        sudo ifconfig lo: 127.0.0.2 up || exit
+        if [[ " $* " = *" --sa "* ]]; then
+            conf=proxy_gnb.band78.sa.fr1.106PRB.usrpn310.conf
+        else
+            conf=proxy_rcc.band78.tm1.106PRB.nfapi.conf
+        fi
+        cmd=(
+            # Keep the gNB on processor 1 (the second processor) by default
+            taskset --cpu-list 1
+            ./ran_build/build/nr-softmodem
+            -O "../ci-scripts/conf_files/untested/$conf"
+            --nfapi VNF
+            --noS1
+            --emulate-l1
+            --log_config.global_log_options level,nocolor,time,thread_id
+        )
+        ;;
+
+    (ue)
+        echo "Node $NODE_NUMBER: UE"
+
+        # First processor (#0) is for proxy.
+        # Second processor (#1) is for eNB and gNB.
+        # Remaining processors (#2-N) are for the UEs and NRUEs, one (pair) per processor or
+        # as best we can if there are more UE/NR pairs than processors
+        num_cpus=$(grep -c ^processor /proc/cpuinfo)
+        cpu=$(( (NODE_NUMBER - 2) % (num_cpus - 2) + 2 ))
+        echo "Using CPU $cpu of $num_cpus for UE$((NODE_NUMBER - 1))"
+
+        cmd=(
+            taskset --cpu-list "$cpu"
+            ./ran_build/build/lte-uesoftmodem
+            -O ../ci-scripts/conf_files/untested/episci/proxy_ue.nfapi.conf
+            --L2-emul 5
+            --nokrnmod 1
+            --noS1
+            --num-ues 1
+            --node-number "$NODE_NUMBER"
+            --log_config.global_log_options level,nocolor,time,thread_id
+        )
+        ;;
+
+    (nrue)
+        echo "Node $NODE_NUMBER: NRUE"
+
+        # First processor (#0) is for emane.
+        # Second processor (#1) is for eNB and gNB.
+        # Remaining processors (#2-N) are for the UEs and NRUEs, one (pair) per processor or
+        # as best we can if there are more UE/NR pairs than processors
+        num_cpus=$(grep -c ^processor /proc/cpuinfo)
+        cpu=$(( (NODE_NUMBER - 2) % (num_cpus - 2) + 2 ))
+        echo "Using CPU $cpu of $num_cpus for NRUE$((NODE_NUMBER - 1))"
+
+        cmd=(
+            taskset --cpu-list "$cpu"
+            ./ran_build/build/nr-uesoftmodem
+            -O ../ci-scripts/conf_files/untested/episci/proxy_nr-ue.nfapi.conf
+            --nokrnmod 1
+            --nfapi STANDALONE_PNF
+            --node-number "$NODE_NUMBER"
+            --emulate-l1
+            --log_config.global_log_options level,nocolor,time,thread_id
+        )
+        ;;
+
+    (*)
+        echo >&2 "${0##*/}: Invalid node type '$node_type'"
+        exit 1
+        ;;
+esac
+
+if $use_strace; then
+    cmd=(
+        strace
+        -f                      # trace child processes
+        -o "strace-$NODE_NUMBER.out"
+        "${cmd[@]}"
+    )
+fi
+
+if $use_valgrind; then
+    cmd=(
+        valgrind
+        --trace-children=yes
+        --track-origins=yes
+        --log-file="valgrind-$NODE_NUMBER.out"
+        "${cmd[@]}"
+    )
+fi
+
+# In case we're running with gprof profiling enabled.
+# https://stackoverflow.com/questions/464116/any-way-to-specify-the-location-of-profile-data
+export GMON_OUT_PREFIX=gmon-$NODE_NUMBER.out
+
+# Enable core dumps.  You may want to set core_pattern:
+#  sudo sh -c 'echo /tmp/coredump-%P > /proc/sys/kernel/core_pattern'
+ulimit -c unlimited
+
+set -x
+sudo -E "LD_LIBRARY_PATH=$PWD/ran_build/build:$LD_LIBRARY_PATH" "${cmd[@]}" "$@"

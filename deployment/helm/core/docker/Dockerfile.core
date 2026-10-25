@@ -1,0 +1,32 @@
+FROM docker.io/library/mongo:8
+
+SHELL ["/bin/bash", "-c"]
+
+RUN apt -y update
+RUN DEBIAN_FRONTEND=noninteractive apt install -y tcpdump iptables net-tools python3-pip python3-setuptools python3-wheel ninja-build build-essential flex bison git libsctp-dev libgnutls28-dev libgcrypt-dev libssl-dev libidn11-dev libmongoc-dev libbson-dev libyaml-dev libnghttp2-dev libmicrohttpd-dev libcurl4-gnutls-dev libnghttp2-dev libtins-dev libtalloc-dev meson iproute2 tshark cmake nano iputils-ping traceroute
+
+RUN git clone https://github.com/ujjwalpawar/open5gs-phobos.git /open5gs
+
+WORKDIR /open5gs
+
+RUN sed -i 's/MAX_NUM_OF_PEER             64/MAX_NUM_OF_PEER             11000/g' /open5gs/lib/app/ogs-config.c
+RUN sed -i 's/MAX_NUM_OF_UE               1024/MAX_NUM_OF_UE               11000/g' /open5gs/lib/app/ogs-config.c
+
+RUN sed -i 's/ogs_time_from_sec(2)/ogs_time_from_sec(2000)/g' /open5gs/src/amf/timer.c
+RUN sed -i 's/ogs_time_from_sec(3)/ogs_time_from_sec(3000)/g' /open5gs/src/amf/timer.c
+RUN sed -i 's/ogs_time_from_sec(6)/ogs_time_from_sec(6000)/g' /open5gs/src/amf/timer.c
+RUN sed -i 's/ogs_time_from_sec(30)/ogs_time_from_sec(30000)/g' /open5gs/src/amf/timer.c
+
+RUN sed -i 's/cluster_128_pool = 65536/cluster_128_pool = 655360/g' /open5gs/lib/core/ogs-pkbuf.c
+RUN sed -i 's/cluster_256_pool = 16384/cluster_256_pool = 163840/g' /open5gs/lib/core/ogs-pkbuf.c
+RUN sed -i 's/cluster_512_pool = 4096/cluster_512_pool = 40960/g' /open5gs/lib/core/ogs-pkbuf.c
+RUN sed -i 's/cluster_1024_pool = 2048/cluster_1024_pool = 20480/g' /open5gs/lib/core/ogs-pkbuf.c
+RUN sed -i 's/cluster_2048_pool = 1024/cluster_2048_pool = 10240/g' /open5gs/lib/core/ogs-pkbuf.c
+RUN sed -i 's/cluster_8192_pool = 256/cluster_8192_pool = 2560/g' /open5gs/lib/core/ogs-pkbuf.c
+RUN sed -i 's/cluster_32768_pool = 64/cluster_32768_pool = 640/g' /open5gs/lib/core/ogs-pkbuf.c
+RUN sed -i 's/cluster_big_pool = 8/cluster_big_pool = 80/g' /open5gs/lib/core/ogs-pkbuf.c
+
+RUN meson build --prefix=/open5gs/install
+RUN ninja -C build
+
+WORKDIR /

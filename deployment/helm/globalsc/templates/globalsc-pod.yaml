@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: globalsc
+spec:
+  terminationGracePeriodSeconds: 10
+  hostNetwork: true
+  containers:
+  - name: globalsc
+    image: {{ .Values.globalSCImage | quote }}
+    imagePullPolicy: {{ .Values.imagePullPolicy | quote }}
+    command: ["/phobos-5g/global_slotchecker", {{ .Values.globalSCIP | quote }}, "/config/globalsc-component-ips"]
+    stdin: true
+    tty: true
+    securityContext:
+      privileged: true
+    volumeMounts:
+    - mountPath: /config
+      name: globalsc-component-ips
+    lifecycle:
+      preStop:
+        exec:
+          command: ["pkill", "-SIGINT", "global_slotchecker"]
+  nodeSelector:
+    kubernetes.io/hostname: globalsc
+  volumes:
+  - name: globalsc-component-ips
+    configMap:
+      name: globalsc-component-ips
+      items:
+      - key: globalsc-component-ips
+        path: globalsc-component-ips

@@ -1,0 +1,5 @@
+
+# We used the following command, running on the ins1 outer node
+while true; do   sudo taskset -c 2-52 chrt -f 99 stress-ng --cpu 50 --cpu-ops 500000 --metrics-brief;   sleep 0.6; done
+# We kept the 0.6 sleep the same and varied the cpu-ops from 25k to 500k
+# I ran the last few, and I started the Chronos first, then ran preemptions once data plane was up

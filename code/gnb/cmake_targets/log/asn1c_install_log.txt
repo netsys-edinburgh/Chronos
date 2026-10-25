@@ -1,0 +1,59 @@
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  libfl-dev
+Suggested packages:
+  bison-doc flex-doc
+The following NEW packages will be installed:
+  bison flex libfl-dev
+0 upgraded, 3 newly installed, 0 to remove and 3 not upgraded.
+Need to get 980 kB of archives.
+After this operation, 3077 kB of additional disk space will be used.
+Get:1 http://archive.ubuntu.com/ubuntu focal/main amd64 flex amd64 2.6.4-6.2 [317 kB]
+Get:2 http://archive.ubuntu.com/ubuntu focal/main amd64 bison amd64 2:3.5.1+dfsg-1 [657 kB]
+Get:3 http://archive.ubuntu.com/ubuntu focal/main amd64 libfl-dev amd64 2.6.4-6.2 [6316 B]
+Fetched 980 kB in 1s (751 kB/s)
+Selecting previously unselected package flex.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 73703 files and directories currently installed.)
+Preparing to unpack .../flex_2.6.4-6.2_amd64.deb ...
+Unpacking flex (2.6.4-6.2) ...
+Selecting previously unselected package bison.
+Preparing to unpack .../bison_2%3a3.5.1+dfsg-1_amd64.deb ...
+Unpacking bison (2:3.5.1+dfsg-1) ...
+Selecting previously unselected package libfl-dev:amd64.
+Preparing to unpack .../libfl-dev_2.6.4-6.2_amd64.deb ...
+Unpacking libfl-dev:amd64 (2.6.4-6.2) ...
+Setting up flex (2.6.4-6.2) ...
+Setting up libfl-dev:amd64 (2.6.4-6.2) ...
+Setting up bison (2:3.5.1+dfsg-1) ...
+update-alternatives: using /usr/bin/bison.yacc to provide /usr/bin/yacc (yacc) in auto mode
+Processing triggers for man-db (2.9.1-1) ...
+Processing triggers for install-info (6.7.0.dfsg.2-5) ...
+Cloning into '/tmp/asn1c'...
+Already on 'vlm_master'
+Your branch is up to date with 'origin/vlm_master'.
+commit 02b0f32a80e12fde1d401894f3f8cb0b2745ecb9
+Author: Seaver Thorn <swthorn@ncsu.edu>
+Date:   Mon Jun 9 15:22:47 2025 -0400
+
+    Resolve some errors from "make check"
+autoreconf: Entering directory `.'
+autoreconf: configure.ac: not using Gettext
+autoreconf: running: aclocal -I m4
+autoreconf: configure.ac: tracing
+autoreconf: configure.ac: creating directory config
+autoreconf: running: libtoolize --copy
+libtoolize: putting auxiliary files in AC_CONFIG_AUX_DIR, 'config'.
+libtoolize: copying file 'config/ltmain.sh'
+libtoolize: putting macros in AC_CONFIG_MACRO_DIRS, 'm4'.
+libtoolize: copying file 'm4/libtool.m4'
+libtoolize: copying file 'm4/ltoptions.m4'
+libtoolize: copying file 'm4/ltsugar.m4'
+libtoolize: copying file 'm4/ltversion.m4'
+libtoolize: copying file 'm4/lt~obsolete.m4'
+autoreconf: running: /usr/bin/autoconf
+configure.ac:270: error: possibly undefined macro: AC_CHECK_INCLUDES_DEFAULT
+      If this token and others are legitimate, please use m4_pattern_allow.
+      See the Autoconf documentation.
+autoreconf: /usr/bin/autoconf failed with exit status: 1

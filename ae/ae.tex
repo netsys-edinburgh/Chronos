@@ -1,0 +1,389 @@
+\documentclass[10pt,twocolumn]{article}
+
+\usepackage[margin=0.50in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue}
+\setlength{\columnsep}{0.22in}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1pt}
+\setlist{nosep,leftmargin=*,topsep=1pt}
+\newcommand{\code}[1]{\texttt{#1}}
+
+\makeatletter
+\renewcommand\section{\@startsection{section}{1}{0pt}{1.0ex}{0.35ex}{\normalsize\bfseries}}
+\renewcommand\subsection{\@startsection{subsection}{2}{0pt}{0.7ex}{0.25ex}{\normalsize\bfseries}}
+\renewcommand{\verbatim@font}{\ttfamily}
+\makeatother
+
+\title{Artifact: Chronos: Scalable and Cost-Effective Cloud-based RAN Emulation System}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Artifact overview}
+
+This artifact accompanies the paper \emph{Chronos: Scalable and Cost-Effective
+Cloud-based RAN Emulation System}.  Its purpose is to make the implementation available for inspection,
+provide the scripts used to deploy Chronos, provide the paper's plot outputs and
+their underlying data, and demonstrate that the Chronos code is functional on a
+Powder/Emulab deployment.
+
+The evaluation combines two complementary forms of evidence.  First, the
+artifact supplies the data and scripts used to generate the plots in the
+paper.  Second, the hosted Powder deployment gives evaluators a hands-on
+view of Chronos operating end to end: its components start, coordinate RAN
+slots, attach a UE, and carry data-plane traffic.
+
+The repository includes \code{chronos-artifact.mp4},
+a video tutorial covering the complete artifact and Powder evaluation workflow.
+
+\subsection{Badge scope}
+
+The artifact is prepared to support all three requested badges:
+
+\begin{itemize}
+  \item \textbf{Artifacts Available:} the source, deployment automation,
+  experiment data, and plotting scripts are publicly available in the GitHub
+  repository.
+  \item \textbf{Artifacts Evaluated--Functional:} evaluators connect to the
+  hosted Powder deployment and verify Chronos's end-to-end operation.
+  \item \textbf{Results Reproduced:} evaluators run the plotting notebook and
+  reproduce the key scalability result on Powder by measuring dilation at
+  increasing gNB/UE scale.
+\end{itemize}
+
+\subsection{Obtaining the artifact}
+
+Clone the artifact repository from GitHub and enter its root directory:
+
+\noindent\code{git clone }\url{https://github.com/netsys-edinburgh/EmuRAN-Draft-Artifact.git}\\
+\code{cd EmuRAN-Draft-Artifact}
+
+The repository is available at
+\href{https://github.com/netsys-edinburgh/EmuRAN-Draft-Artifact}{Chronos artifact GitHub repository}.
+All installation and notebook commands below should be run from this directory.
+
+\section{Artifact components}
+
+The artifact has four main components.
+
+\subsection{Source code}
+
+The \code{code/} directory contains the implementation of Chronos:
+
+\begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.29\columnwidth}>{\raggedright\arraybackslash}p{0.65\columnwidth}@{}}
+\toprule
+Path & Purpose \\
+\midrule
+\path{code/supervisor/} & Patched Linux 5.15/KVM source.  The virtualized TSC allows guest time to be advanced or paused independently of wall-clock time. \\
+\path{code/slot_monitor/} & The \code{custom\_tsc} kernel module, shared-memory support, and slot-monitor utilities used to control virtual time. \\
+\path{code/middlebox/} & Modified multi-UE nFAPI proxy.  It forwards traffic, tracks local slot completion, and communicates with the global slot coordinator. \\
+\path{code/gnb/} & Modified OpenAirInterface gNB source, operated in nFAPI VNF/emulated-L1 mode. \\
+\path{code/ue/} & Modified OpenAirInterface UE source, operated in standalone nFAPI PNF/emulated-L1 mode. \\
+\bottomrule
+\end{tabular}
+
+Together these components implement PHY bypass, virtual time, slot-level
+synchronization, and distributed control/data-plane forwarding.  The gNB, UE,
+and supervisor directories are complete source trees rather than small patch
+sets so that the evaluated implementation is preserved in full.
+
+\subsection{Deployment scripts}
+
+The \code{deployment/} directory contains the automation used to prepare and
+run Chronos:
+
+\begin{itemize}
+  \item \code{deployment/provisioning/profile.py} is an Emulab/Powder profile
+  that allocates controller/compute nodes, proxy nodes, and a global slot
+  coordinator.
+  \item \code{deployment/provisioning/scripts/} configures Ubuntu hosts,
+  builds and installs the patched kernel, creates nested KVM guests, installs
+  the virtual-time module and services, configures networking, and constructs
+  the Kubernetes cluster.
+  \item \code{deployment/helm/} contains Helm charts for the mobile core,
+  global slot coordinator, proxy, gNB, UE, and persistent-UE components.
+  \item \code{deployment/helm/values.yaml} controls topology size, image
+  names, addressing, startup behavior, and the UE data-plane workload.
+  \item Operational scripts under \code{deployment/helm/} start UEs, inspect
+  or restart components, and collect logs.
+\end{itemize}
+
+These scripts perform privileged operations and modify kernels, networking,
+storage, VMs, and cluster state.  They must only be used on disposable
+Powder/Emulab experiment nodes.
+
+\subsection{Plot outputs}
+
+The \code{results/} directory has two subdirectories:
+
+\begin{itemize}
+  \item \code{results/data/} contains raw logs, packet captures, CSV/JSON
+  intermediates, and analysis/plotting scripts from the paper experiments.
+  \item \code{results/output/} contains the paper's prepared PDF plot outputs.
+\end{itemize}
+
+The top-level \code{plot.ipynb} provides a convenient way to inspect the plot
+data, plotting scripts, and PDF outputs.  Evaluators may browse the prepared
+outputs directly and trace each result back to its associated analysis code
+and recorded measurements.
+
+\subsection{Running the code and deployment scripts on Powder/Emulab}
+
+The authors run a functional deployment created with the supplied
+Powder/Emulab profile and deployment automation.  Evaluators receive SSH
+access to this running deployment and inspect its operation.  The goal is to
+demonstrate that the implementation and deployment scripts work together.  The
+preserved experiment data and outputs complement this live demonstration
+with evidence from the paper's full-scale evaluations.
+
+\section{Running the plotting notebook}
+
+The top-level \code{plot.ipynb} runs the plotting script associated with each
+paper figure.  Each code cell handles one figure or panel, reads its inputs
+from \code{results/data/}, writes a newly generated PDF to
+\code{results/output/}, and displays that PDF inline.  The notebook uses paths
+relative to the artifact root and therefore does not require any
+machine-specific path changes.
+
+\subsection{Software dependencies}
+
+The notebook runs on Linux and macOS with Python 3.10 or newer.  On Linux,
+install Python 3 and its \code{venv} support using the distribution package
+manager.  On macOS, use a current Python installation from
+\href{https://www.python.org/}{python.org} or Homebrew.  The notebook and
+plotting scripts require the following Python packages:
+
+\begin{itemize}
+  \item \code{jupyter}, \code{IPython}, and \code{ipykernel} for the notebook
+  interface, inline display, and the dedicated artifact kernel;
+  \item \code{numpy} for numerical processing;
+  \item \code{pandas} for CSV and tabular data processing;
+  \item \code{matplotlib} and \code{seaborn} for plotting; and
+  \item \code{pymupdf} for rendering each generated PDF inside the notebook.
+\end{itemize}
+
+No GPU, LaTeX installation, or privileged access is needed for this notebook
+on either platform.
+Package requirements are listed in \code{requirement.txt}.  The supplied
+installer verifies Python 3.10 or newer, creates \code{.venv}, and installs all
+packages into that environment.  From the artifact root, run:
+
+\begin{verbatim}
+./install_dependencies.sh
+\end{verbatim}
+
+To use a different Python executable or virtual-environment location, set
+\code{PYTHON\_BIN} or \code{VENV\_DIR}, respectively, before running the
+installer.
+
+Installing these packages requires Internet access once.  Subsequent notebook
+runs use the data already included in the artifact.
+
+\subsection{Launching and running the notebook}
+
+Start Jupyter from the artifact root, which is the directory containing
+\code{plot.ipynb} and \code{results/}:
+
+\begin{verbatim}
+source .venv/bin/activate
+jupyter notebook plot.ipynb
+\end{verbatim}
+
+In the browser, select the \code{Python (Chronos Artifact)} kernel registered
+by the installer.  This ensures that PyMuPDF and the other plotting
+dependencies are available.  Run an individual cell to generate one figure,
+or select \emph{Run All} to execute
+the complete notebook.  The plotting programs use Matplotlib's
+non-interactive \code{Agg} backend, so output appears inline rather than in a
+separate desktop window.
+
+Before each plot, the cell displays the paper figure number and the plotting
+script being executed.  After the script completes, the cell renders the new
+PDF and prints its path below the image.  A complete run produces 30 PDF files
+under \code{results/output/}.  Re-running a cell replaces that cell's named
+output while leaving the source data unchanged.
+
+The notebook can also be executed non-interactively:
+
+\begin{verbatim}
+source .venv/bin/activate
+jupyter nbconvert plot.ipynb \
+  --to notebook --execute \
+  --output plot.executed.ipynb \
+  --ExecutePreprocessor.timeout=300
+find results/output -maxdepth 1 \
+  -name '*.pdf' | wc -l
+\end{verbatim}
+
+The expected PDF count is \code{30}.  If a cell reports that it cannot find
+\code{results/}, stop Jupyter and launch it again from the artifact root.  If
+a plotting script fails, the cell reports the script's exit code and relevant
+error message.
+
+\section{Supported functionality}
+
+The hosted demonstration checks the following properties:
+
+\begin{enumerate}
+  \item the Powder/Emulab profile allocates the required node roles;
+  \item the provisioning scripts install the patched host/guest environment
+  and create a working Kubernetes cluster;
+  \item the core, global slot coordinator, proxy, gNB, and UE containers start;
+  \item the gNB connects to the core and the UE completes registration;
+  \item the local and global coordinators advance the emulation through RAN
+  slots; and
+  \item the attached UE obtains a working data plane and exchanges test
+  traffic.
+\end{enumerate}
+
+Passing these checks demonstrates that the artifact code is functional.  The
+plotting notebook regenerates the paper figures from the supplied data, and the
+Powder scale sweep below reproduces the key relationship between emulation
+scale, available compute, and the dilation factor.
+
+\section{Access and evaluation window}
+
+The authors provide a running Chronos deployment on Powder for the artifact
+evaluation period from \textbf{September 1 through September 15}.  The authors
+handle the Powder reservation, profile instantiation, kernel build, Kubernetes
+cluster, and repository dependencies so evaluators can begin directly with
+the functional checks.
+
+To obtain access, each evaluator should post their \textbf{public SSH key} in
+a comment on the paper's HotCRP artifact-evaluation page.  The authors will add
+the key to the Powder deployment and reply through HotCRP with the SSH command,
+host name, user name, and any required jump-host instructions.  Only a public
+key (for example, the contents of \code{id\_ed25519.pub}) should be posted.
+Evaluators must never send a private key, passphrase, password, or access token.
+
+Access is available only during the stated September 1--15 window.  Requests
+should be posted early enough to allow the authors to install the key and reply
+within the evaluation period.  The evaluator needs an SSH client and the
+private key corresponding to the submitted public key.
+
+The video tutorial \code{chronos-artifact.mp4}
+demonstrates the complete Powder evaluation workflow.
+
+\section{Evaluation on Powder/Emulab}
+
+\subsection{Step 1: request and test SSH access}
+
+Post the evaluator's public SSH key in a HotCRP comment.  After the authors
+reply with connection details, use the supplied command to log in.  For
+example, the command will have the following general form (the actual values
+come from HotCRP):
+
+\begin{verbatim}
+ssh -i <private-key> <user>@<host>
+\end{verbatim}
+
+Do not change SSH authorization files or share the connection details outside
+the artifact-evaluation process.  If login fails, report the exact SSH error
+through HotCRP; do not post the private key.
+
+\subsection{Step 2: connect to the controller}
+
+The SSH command supplied through HotCRP connects to \code{node0}.  Node 0 is
+the entry node for the experiment.  From \code{node0}, connect to the
+controller and enter its Chronos deployment directory:
+
+\begin{verbatim}
+ssh ubuntu@10.2.1.2
+cd chronos-auto-deploy
+\end{verbatim}
+
+\subsection{Step 3: configure and deploy one scale}
+
+This experiment reproduces a key paper result: as the number of emulated
+gNB/UE pairs increases on a fixed compute allocation, the work required per
+RAN slot eventually exceeds the available real-time compute budget.  Chronos
+responds by increasing its dilation factor, allowing more wall-clock time per
+unit of virtual time while preserving coordinated RAN execution.
+
+Evaluate the following gNB/UE pair counts in order:
+
+\begin{verbatim}
+1, 10, 50, 100, 200
+\end{verbatim}
+
+For the first scale, edit \code{values.yaml}.  Set \code{numberGNB} and
+\code{numberUE} to the same value.  Deploy that configuration with:
+
+\begin{verbatim}
+./run_experiment.sh
+\end{verbatim}
+
+When the interactive interface appears, press \code{p} to display pod status.
+Wait until all expected pods are running.
+
+\subsection{Step 4: verify connections and observe dilation}
+
+After all pods are running, execute the supplied core-log helper:
+
+\begin{verbatim}
+./core-logs.sh
+\end{verbatim}
+
+Confirm from these logs that all configured gNBs and UEs are connected.  In
+the interactive interface, enter \code{l globalsc} to display the global
+coordinator log.  Observe and record the dilation value for the current scale.
+A value near 1 means that the emulation is keeping pace with real time; a value
+above 1 means Chronos is allocating additional wall-clock time to complete the
+virtual slots.
+
+\subsection{Step 5: tear down and repeat}
+
+Remove the current deployment before changing scale:
+
+\begin{verbatim}
+./teardown-experiment.sh
+\end{verbatim}
+
+Wait for teardown to complete.  Then edit \code{values.yaml}, set both
+\code{numberGNB} and \code{numberUE} to the next value in the sequence, and
+repeat Steps 3--5.  Do not start a new deployment until the previous one has
+been removed.
+
+The result is reproduced when the measurements show the same key trend as the
+paper: dilation remains close to real time while the fixed compute allocation
+has capacity, then increases as gNB/UE scale creates compute pressure.  Exact
+values can vary with Powder hardware and load; the reproduced result is the
+increase in dilation that enables Chronos to cope with insufficient compute at
+higher scale while continuing coordinated slot execution.  After recording
+the value for scale 200, run \code{./teardown-experiment.sh} once more and log
+out.  Report failures, missing permissions, or questions through HotCRP.
+
+\section{Limitations and safety notes}
+
+\begin{itemize}
+  \item Cloud/testbed scheduling and network conditions may affect startup
+  time and observed performance; evaluators can record these conditions when
+  interpreting a live run.
+  \item The deployment is shared during the evaluation window.  Evaluators
+  should avoid disruptive or privileged commands and report unhealthy
+  components through HotCRP.
+\end{itemize}
+
+\section{Summary of evaluation}
+
+The evaluator should inspect the supplied code, deployment scripts, plot
+outputs, and recorded data, then connect to the authors' running Powder
+deployment during September 1--15.  Access requires only a public SSH key sent
+through HotCRP comments.  The expected outcome is evidence that the supplied
+Chronos implementation executes end to end with working slot coordination,
+registration, and data-plane traffic.  Evaluators also regenerate the paper
+plots from the supplied data and scripts and reproduce the key Powder result:
+as gNB/UE scale increases on fixed compute, Chronos increases its dilation
+factor to provide the wall-clock time required for coordinated slot execution.
+
+\end{document}

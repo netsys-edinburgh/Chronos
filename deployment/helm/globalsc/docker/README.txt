@@ -1,0 +1,1 @@
+The globalsc uses the same docker file as the proxy

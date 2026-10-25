@@ -1,0 +1,120 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ue-config
+data:
+  ue-deploy.sh: |
+    #!/bin/bash
+
+    UE_ID=$((${HOSTNAME##*-}))
+    GNB_ID=$(( $UE_ID / $UE_PER_GNB ))
+    PROXY_IP="10.3.$(($GNB_ID % $NUM_PROXY + 1)).1"
+
+    BASE_IMSI=208930000000001
+    NEW_IMSI=$(( BASE_IMSI + UE_ID ))
+
+    echo "HOSTNAME        : $HOSTNAME"
+    echo "UE ID           : $UE_ID"
+    echo "Computed IMSI   : $NEW_IMSI"
+    echo "gNB ID          : $GNB_ID"
+    echo "Proxy IP        : $PROXY_IP"
+    echo "UE IP           : $UE_IP_ADDR"
+
+    # Modify the configuration file
+    cp /config/ue.conf /ue.conf
+    sed -i "s/__IMSI__/$NEW_IMSI/g" /ue.conf
+    sed -i "s/__UE_IP_ADDR__/$UE_IP_ADDR/g" /ue.conf
+    sed -i "s/__PROXY_IP_ADDR__/$PROXY_IP/g" /ue.conf
+
+    {{ if .Values.ueNineLogging -}}
+    # Enable logging if this is a "9" UE
+    if [[ ${UE_ID:0:1} == "9" ]]; then
+        echo "9s UE, enabling logging"
+        sed -i 's/nr_mac_log_level                      ="error"/nr_mac_log_level                      ="info"/g' /ue.conf
+        sed -i 's/nr_phy_log_level                      ="error"/nr_phy_log_level                      ="info"/g' /ue.conf
+    fi
+    {{- end }}
+
+    cd /openairinterface5g
+    source /openairinterface5g/oaienv
+    cd /openairinterface5g/cmake_targets/ran_build/build/
+
+    UE_ID="$(($UE_ID / $NUM_PROXY))"
+    GNB_ID="$(($GNB_ID / $NUM_PROXY))"
+
+    echo "Actual UE ID:    $UE_ID"
+    echo "Actual GNB ID:   $GNB_ID"
+
+    {{ if .Values.ueStartSignalWait -}}
+    nc -zv {{ .Values.globalSCIP | quote }} {{ .Values.ueStartSignalPort | quote }} && {
+        echo "Global SC port {{ .Values.ueStartSignalPort }} is active, enabling logging..."
+        sed -i 's/nr_mac_log_level                      ="error"/nr_mac_log_level                      ="info"/g' /ue.conf
+        sed -i 's/nr_phy_log_level                      ="error"/nr_phy_log_level                      ="info"/g' /ue.conf
+    } || {
+        echo "Waiting for start message"
+        python3 -c "import socket, random, time; server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM); server_socket.bind(('', 12000)); server_socket.recvfrom(1024); print('Start message received!'); time.sleep(random.random() / 5); print(f'Starting the UE {time.time()}')"
+    }
+    {{- end }}
+
+    while true; do
+        taskset -c 2-50 chrt -f 99 ./nr-uesoftmodem -O /ue.conf --nfapi STANDALONE_PNF --node-number 2 --emulate-l1 --sa 1  $UE_ID $GNB_ID
+        echo "nr-uesoftmodem exited with code $? — restarting" >&2
+    done
+  ue.conf: |
+    log_config = {
+      global_log_level                      ="error";
+      hw_log_level                          ="error";
+      phy_log_level                         ="error";
+      mac_log_level                         ="error";
+      rlc_log_level                         ="error";
+      pdcp_log_level                        ="error";
+      rrc_log_level                         ="error";
+      nr_phy_log_level                      ="error";
+      nr_mac_log_level                      ="error";
+    };
+
+    uicc0 = {
+    imsi = "__IMSI__";
+    key = "00001111222233334444555566667777";
+    opc= "88889999aaaabbbbccccddddeeeeffff";
+    dnn= "internet";
+    nssai_sst=1;
+    }
+
+    MACRLCs = (
+            {
+            num_cc = 1;
+            tr_n_preference = "nfapi";
+            local_n_if_name  = "lo:";
+            remote_n_address = "__PROXY_IP_ADDR__";
+            local_n_address  = "__UE_IP_ADDR__";
+            local_n_portc    = 50600;
+            remote_n_portc   = 50601;
+            local_n_portd    = 50610;
+            remote_n_portd   = 50611;
+            }
+    );
+  ue-dataplane.sh: |
+    #!/bin/bash
+
+    # Wait until the data plane is up
+    until ping -I oaitun_ue1 -c 1 10.45.0.1 &> /dev/null; do
+      sleep {{ .Values.ueDataPlaneWaitTime }}
+    done
+    echo "Data plane is up"
+
+    {{- if eq ( lower .Values.ueDataPlane ) "ping" }}
+    echo "Running ping"
+    while true; do
+      ping -I oaitun_ue1 -c 1 10.45.0.1 | grep "64 bytes"
+      sleep {{ .Values.ueDataPlanePingSleepTime }}
+    done
+    {{- else if eq ( lower .Values.ueDataPlane ) "irtt" }}
+    echo "Running irtt"
+    UE_IP=$(ip address show dev oaitun_ue1 | grep inet | grep "10.45" | awk -F ' ' '{ print $2 }' | awk -F '/' '{ print $1 }')
+    echo "UE IP is $UE_IP"
+    irtt client -d 10h -i {{ .Values.ueDataPlaneIrttSleepTime }}s --local=$UE_IP {{ .Values.globalSCIP }}
+    {{- else }}
+    {{- fail ( printf "Unknown data plane functionality (.Values.ueDataPlane): '%s'" .Values.ueDataPlane ) }}
+    {{- end }}
+
